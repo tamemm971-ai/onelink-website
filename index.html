@@ -30,12 +30,9 @@
 
 <script>
 document.documentElement.classList.remove("no-js");
-/* cinematic intro: first visit per session only, never for reduced-motion */
+/* cinematic intro: every page load, never for reduced-motion */
 try {
-  var introForce = window.location.search.indexOf("intro=force") > -1;
-  if (introForce ||
-      (!sessionStorage.getItem("onelinkIntroSeen") &&
-       !window.matchMedia("(prefers-reduced-motion: reduce)").matches)) {
+  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     document.documentElement.classList.add("intro-play");
   }
 } catch (e) {}
