@@ -69,6 +69,81 @@ body::-webkit-scrollbar-thumb:hover{ background:rgba(199,162,82,0.5); }
   border-radius:2px;
 }
 
+/* ============================================================
+   Cinematic intro — two curtains carry ONE + LINK to the centre,
+   hold, then part to reveal the site. Session-gated in <head>.
+   ============================================================ */
+.intro{ display:none; }
+.intro-play{ overflow:hidden; }
+.intro-play .intro{
+  display:flex;
+  position:fixed; inset:0; z-index:9000;
+}
+.intro-half{
+  flex:1 1 50%;
+  display:flex;
+  align-items:center;
+  overflow:hidden;
+  background:var(--ink);
+  position:relative;
+}
+.intro-half--left{ justify-content:flex-end; }
+.intro-half--right{ justify-content:flex-start; }
+
+/* gold seam where the curtains meet */
+.intro-half--left::after{
+  content:"";
+  position:absolute; top:0; right:0; bottom:0; width:1px;
+  background:linear-gradient(to bottom, transparent, rgba(199,162,82,0.55) 50%, transparent);
+  opacity:0;
+  animation:introSeam 0.5s ease-out 0.95s forwards;
+}
+@keyframes introSeam{ to{ opacity:1; } }
+
+.intro-word{
+  font-family:var(--font-display);
+  font-weight:340;
+  font-size:clamp(44px, 13vw, 150px);
+  line-height:1;
+  letter-spacing:0.02em;
+  background:linear-gradient(100deg, var(--gold-bright), var(--gold) 75%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  opacity:0;
+  will-change:transform, opacity;
+}
+.intro-play .intro-half--left .intro-word{
+  animation:introWordLeft 0.85s var(--ease-out) 0.15s forwards;
+}
+.intro-play .intro-half--right .intro-word{
+  animation:introWordRight 0.85s var(--ease-out) 0.15s forwards;
+}
+@keyframes introWordLeft{
+  from{ opacity:0; transform:translateX(-45vw); }
+  to{ opacity:1; transform:translateX(0); }
+}
+@keyframes introWordRight{
+  from{ opacity:0; transform:translateX(45vw); }
+  to{ opacity:1; transform:translateX(0); }
+}
+
+/* curtains part at 1.5s, carrying the words with them */
+.intro-play .intro-half--left{
+  animation:introPartLeft 0.95s cubic-bezier(.76,0,.24,1) 1.5s forwards;
+}
+.intro-play .intro-half--right{
+  animation:introPartRight 0.95s cubic-bezier(.76,0,.24,1) 1.5s forwards;
+}
+@keyframes introPartLeft{ to{ transform:translateX(-100%); } }
+@keyframes introPartRight{ to{ transform:translateX(100%); } }
+
+/* whole overlay lets go at the end */
+.intro-play .intro{
+  animation:introFade 0.35s ease-out 2.35s forwards;
+}
+@keyframes introFade{ to{ opacity:0; visibility:hidden; } }
+
 /* quiet vignette — depth without a colour wash */
 .grain{
   position:fixed; inset:0; pointer-events:none; z-index:2000;

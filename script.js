@@ -3,6 +3,20 @@
 
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  /* Cinematic intro — mark as seen, then remove the overlay once it has played */
+  var intro = document.getElementById("intro");
+  if (intro) {
+    if (document.documentElement.classList.contains("intro-play")) {
+      try { sessionStorage.setItem("onelinkIntroSeen", "1"); } catch (e) {}
+      window.setTimeout(function () {
+        intro.remove();
+        document.documentElement.classList.remove("intro-play");
+      }, 2750);
+    } else {
+      intro.remove();
+    }
+  }
+
   /* Nav solidify-on-scroll */
   var nav = document.getElementById("nav");
   var onScroll = function () {
